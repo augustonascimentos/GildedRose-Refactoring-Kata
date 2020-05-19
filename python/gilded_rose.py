@@ -5,8 +5,8 @@ class GildedRose(object):
         self.items = items
 
     def check_quality_quantity(self):
-        quality = self.items.pop().quality
-        name = self.items.pop().name
+        quality = self.items[0].quality
+        name = self.items[0].name
 
         if "Sulfuras" in name:
             return self.items
