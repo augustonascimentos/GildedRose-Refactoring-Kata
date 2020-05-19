@@ -14,9 +14,8 @@ class GildedRoseTest(unittest.TestCase):
     def test_negative_quality_value(self):
         items = [Item("foo", 1, -2)]
         gilded_rose = GildedRose(items)
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             gilded_rose.update_quality()
-        self.assertTrue('Quality can not be negative' in context.exception)
 
     def test_aged_brie_quality_increase_when_get_older(self):
         items = [Item("Aged Brie", 2, 4)]
@@ -28,8 +27,8 @@ class GildedRoseTest(unittest.TestCase):
     def test_quality_cant_be_over_50(self):
         items = [Item("foo", 2, 51)]
         gilded_rose = GildedRose(items)
-        gilded_rose.update_quality()
-        self.assertRaises(Exception, gilded_rose.update_quality)
+        with self.assertRaises(Exception):
+            gilded_rose.update_quality()
 
     def test_sulfuras_is_not_decreasing_quality(self):
         items = [Item("Sulfuras, Hand of Ragnarose", 0, 50)]

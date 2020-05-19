@@ -4,8 +4,20 @@ class GildedRose(object):
     def __init__(self, items):
         self.items = items
 
+    def check_quality_quantity(self):
+        quality = self.items.pop().quality
+        name = self.items.pop().name
+
+        if "Sulfuras" in name:
+            return self.items
+        if quality > 50:
+            raise Exception('Quality can not be over 50')
+        if quality < 0:
+            raise Exception('Quality can not be negative')
+
     def update_quality(self):
         for item in self.items:
+            self.check_quality_quantity()
             if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
                 if item.quality > 0:
                     if item.name != "Sulfuras, Hand of Ragnaros":
