@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-
+class GildedRose(object):
+
+    def __init__(self, items):
+        self.items = items
+
+    def update_quality(self):
+        for item in self.items:
+            if not especial_item_case(item):
+                decrease_sell_by_day_value_by_one(item)
+                decrease_quality_by_one(item)
+
+
 def decrease_sell_by_day_value_by_one(item):
     item.sell_in -= 1
     return item
@@ -6,6 +18,11 @@ def decrease_sell_by_day_value_by_one(item):
 
 def increase_quality_by_one(item):
     item.quality += 1
+    return item
+
+
+def decrease_quality_by_one(item):
+    item.quality -= 1
     return item
 
 
@@ -35,63 +52,53 @@ def aged_brie_quality_increase_when_get_older(item):
     if 'Aged Brie' in item.name:
         decrease_sell_by_day_value_by_one(item)
         increase_quality_by_one(item)
+        return item
 
 
 def expired_sell_date(item):
     if 'Sulfuras' not in item.name:
         if item.sell_in < 0:
             item.quality -= 2
+            return item
 
 
 def backstage_passes(item):
     if 'Backstage passes to a TAFKAL80ETC concert' in item.name:
-        if item.sell_in <= 10:
+        if 10 >= item.sell_in > 5:
             increase_quality_by_two(item)
+            decrease_sell_by_day_value_by_one(item)
+            return item
         if item.sell_in <= 5:
             increase_quality_by_three(item)
+            decrease_sell_by_day_value_by_one(item)
+            return item
         if item.sell_in < 0:
             item.quality = 0
+            decrease_sell_by_day_value_by_one(item)
+            return item
+        if item.sell_in > 10:
+            decrease_sell_by_day_value_by_one(item)
+            increase_quality_by_one(item)
+            return item
 
 
-class GildedRose(object):
+def sulfuras(item):
+    if 'Sulfuras' in item.name:
+        return item
 
-    def __init__(self, items):
-        self.items = items
 
-    def update_quality(self):
-        for item in self.items:
-            check_quality_quantity(item)
-            expired_sell_date(item)
-            aged_brie_quality_increase_when_get_older(item)
-            backstage_passes(item)
-            a = 2
-            # if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
-            #     if item.quality > 0:
-            #         if item.name != "Sulfuras, Hand of Ragnaros":
-            #             item.quality = item.quality - 1
-            # else:
-            #     if item.quality < 50:
-            #         item.quality = item.quality + 1
-            #         if item.name == "Backstage passes to a TAFKAL80ETC concert":
-            #             if item.sell_in < 11:
-            #                 if item.quality < 50:
-            #                     item.quality = item.quality + 1
-            #             if item.sell_in < 6:
-            #                 if item.quality < 50:
-            #                     item.quality = item.quality + 1
-            # if item.name != "Sulfuras, Hand of Ragnaros":
-            #     item.sell_in = item.sell_in - 1
-            # if item.sell_in < 0:
-            #     if item.name != "Aged Brie":
-            #         if item.name != "Backstage passes to a TAFKAL80ETC concert":
-            #             if item.quality > 0:
-            #                 if item.name != "Sulfuras, Hand of Ragnaros":
-            #                     item.quality = item.quality - 1
-            #         else:
-            #             item.quality = item.quality - item.quality
-            #     else:
-            #         if item.quality < 50:
-            #             item.quality = item.quality + 1
+def especial_item_case(item):
+    if check_quality_quantity(item):
+        return True
+    if expired_sell_date(item):
+        return True
+    if aged_brie_quality_increase_when_get_older(item):
+        return True
+    if backstage_passes(item):
+        return True
+    if sulfuras(item):
+        return True
+    return False
 
 
 class Item:
