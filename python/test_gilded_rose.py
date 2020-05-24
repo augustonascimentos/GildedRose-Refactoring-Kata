@@ -49,7 +49,7 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(7, items[0].quality)
 
     def test_backstage_passess_drops_to_zero_after_concert(self):
-        items = [Item("Backstage passes to a TAFKAL80ETC concert", 0, 4)]
+        items = [Item("Backstage passes to a TAFKAL80ETC concert", -1, 4)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
         self.assertEqual(0, items[0].quality)

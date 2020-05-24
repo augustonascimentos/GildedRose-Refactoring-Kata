@@ -26,6 +26,11 @@ def decrease_quality_by_one(item):
     return item
 
 
+def decrease_quality_by_two(item):
+    item.quality -= 2
+    return item
+
+
 def increase_quality_by_two(item):
     item.quality += 2
     if item.quality > 50:
@@ -56,7 +61,7 @@ def aged_brie_quality_increase_when_get_older(item):
 
 
 def expired_sell_date(item):
-    if 'Sulfuras' not in item.name:
+    if 'Sulfuras' not in item.name and 'Backstage' not in item.name:
         if item.sell_in < 0:
             item.quality -= 2
             return item
@@ -68,7 +73,7 @@ def backstage_passes(item):
             increase_quality_by_two(item)
             decrease_sell_by_day_value_by_one(item)
             return item
-        if item.sell_in <= 5:
+        if 5 >= item.sell_in > 0:
             increase_quality_by_three(item)
             decrease_sell_by_day_value_by_one(item)
             return item
@@ -87,6 +92,13 @@ def sulfuras(item):
         return item
 
 
+def conjured_items(item):
+    if 'Conjured' in item.name:
+        decrease_sell_by_day_value_by_one(item)
+        decrease_quality_by_two(item)
+        return item
+
+
 def especial_item_case(item):
     if check_quality_quantity(item):
         return True
@@ -97,6 +109,8 @@ def especial_item_case(item):
     if backstage_passes(item):
         return True
     if sulfuras(item):
+        return True
+    if conjured_items(item):
         return True
     return False
 
